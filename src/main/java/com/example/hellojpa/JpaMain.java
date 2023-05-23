@@ -19,8 +19,12 @@ public class JpaMain {
             member.setUsername("member1");
             em.persist(member);
 
-            String query = "select (select m1 From Member m1) from Member m join Team t on m.username = t.name";
-            List<Member> result = em.createQuery(query, Member.class).getResultList();
+            String query = "select t from Team t join fetch t.members";
+            List<Team> result = em.createQuery(query, Team.class).getResultList();
+
+            for (Team team : result) {
+                System.out.println("team = " + team.getName());
+            }
 
             tx.commit();
         } catch (Exception e) {
